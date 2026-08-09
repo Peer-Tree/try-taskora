@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import heroImage from "@/assets/hero-phone.jpg";
 
-const WHATSAPP_URL = "https://wa.me/17857842294?text=Hi%20Taskora%2C%20I%27d%20like%20to%20start%20doing%20AI%20tasks";
+const WHATSAPP_URL = "https://wa.me/18156611544?text=Hi%20Taskora%2C%20I%27d%20like%20to%20start%20doing%20AI%20tasks";
 const EMAIL_URL =
   "mailto:heknowyou69@gmail.com?subject=Taskora%20application&body=Hi%20Taskora%2C%20I%27d%20like%20to%20start%20doing%20AI%20tasks.";
 
@@ -182,7 +182,7 @@ function Index() {
               rel="noopener noreferrer"
               className="glow-ring inline-flex items-center justify-center rounded-full bg-primary px-8 py-4 text-base font-bold text-primary-foreground transition-transform hover:-translate-y-0.5"
             >
-              WhatsApp +1 (785) 784-2294
+              WhatsApp +1 (815) 661-1544
             </a>
             <a
               href={EMAIL_URL}
