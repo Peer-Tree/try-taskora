@@ -147,214 +147,289 @@ function GetStartedPage() {
           </div>
 
           <h1 className="mt-4 text-3xl font-bold md:text-5xl">
-            Get started with <span className="text-gradient-lime">Taskora</span>
+            {submitted ? (
+              <>You're on the list, <span className="text-gradient-lime">{form.getValues("name").split(" ")[0] || "friend"}</span></>
+            ) : (
+              <>Get started with <span className="text-gradient-lime">Taskora</span></>
+            )}
           </h1>
           <p className="mt-3 max-w-xl text-muted-foreground">
-            Tell us a bit about yourself and the AI tasks you're interested in. We'll review your
-            application and usually reply within 24 hours.
+            {submitted
+              ? "Thanks for submitting your interest. Support will reach out to you within 24 hours to verify your details."
+              : "Tell us a bit about yourself and the AI tasks you're interested in. We'll review your application and usually reply within 24 hours."}
           </p>
 
-          <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-primary" />
-              Takes about 2 minutes
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-primary" />
-              No fees, ever
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <MessageCircle className="h-4 w-4 text-primary" />
-              Reply via WhatsApp or email
-            </span>
-          </div>
+          {!submitted && (
+            <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5">
+                <Clock className="h-4 w-4 text-primary" />
+                Takes about 2 minutes
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <ShieldCheck className="h-4 w-4 text-primary" />
+                No fees, ever
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <MessageCircle className="h-4 w-4 text-primary" />
+                Reply via WhatsApp or email
+              </span>
+            </div>
+          )}
         </div>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 space-y-10">
-          {/* Section 1: Personal details */}
-          <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
-            <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-[family-name:var(--font-display)] text-sm font-bold text-primary-foreground">
-                1
-              </span>
-              <h2 className="text-xl font-semibold">Personal details</h2>
-            </div>
-            <p className="mt-1 pl-11 text-sm text-muted-foreground">
-              We use this to personalize your onboarding and match you with the right tasks.
-            </p>
-
-            <div className="mt-6 space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="name">Full name</Label>
-                <Input
-                  id="name"
-                  placeholder="Jane Doe"
-                  {...form.register("name")}
-                  aria-invalid={!!form.formState.errors.name}
-                />
-                {form.formState.errors.name && (
-                  <p className="text-sm text-destructive">{form.formState.errors.name.message}</p>
-                )}
+        {submitted ? (
+          <div className="mt-10 space-y-6">
+            <div className="rounded-2xl border border-primary/30 bg-primary/10 p-6 md:p-8">
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary">
+                  <CheckCircle2 className="h-5 w-5 text-primary-foreground" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold">Application received</h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Your support ticket number is{" "}
+                    <span className="font-mono font-semibold text-foreground">#{ticketNumber}</span>.
+                    Keep it handy for faster support.
+                  </p>
+                </div>
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="gender">Gender</Label>
-                <Select
-                  value={form.watch("gender")}
-                  onValueChange={(value) =>
-                    form.setValue("gender", value as FormValues["gender"], { shouldValidate: true })
-                  }
+            <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+              <h3 className="text-lg font-semibold">Want to speed up the process?</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Message us on WhatsApp and we'll review your details right away. Your ticket number is already included.
+              </p>
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                <Button
+                  asChild
+                  className="glow-ring flex-1 rounded-full bg-primary py-5 text-base font-bold text-primary-foreground transition-transform hover:-translate-y-0.5"
                 >
-                  <SelectTrigger id="gender" aria-invalid={!!form.formState.errors.gender}>
-                    <SelectValue placeholder="Select your gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="non-binary">Non-binary</SelectItem>
-                    <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
-                  </SelectContent>
-                </Select>
-                {form.formState.errors.gender && (
-                  <p className="text-sm text-destructive">
-                    {form.formState.errors.gender.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email">Email address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="jane@example.com"
-                  {...form.register("email")}
-                  aria-invalid={!!form.formState.errors.email}
-                />
-                {form.formState.errors.email && (
-                  <p className="text-sm text-destructive">
-                    {form.formState.errors.email.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          </section>
-
-          {/* Section 2: Location & contact */}
-          <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
-            <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-[family-name:var(--font-display)] text-sm font-bold text-primary-foreground">
-                2
-              </span>
-              <h2 className="text-xl font-semibold">Location & contact</h2>
-            </div>
-            <p className="mt-1 pl-11 text-sm text-muted-foreground">
-              Taskora is open to US residents. We need a phone number so we can reach you on
-              WhatsApp.
-            </p>
-
-            <div className="mt-6 space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="city">City of residence (US)</Label>
-                <Input
-                  id="city"
-                  placeholder="Austin, Texas"
-                  {...form.register("city")}
-                  aria-invalid={!!form.formState.errors.city}
-                />
-                {form.formState.errors.city && (
-                  <p className="text-sm text-destructive">{form.formState.errors.city.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="phone">Phone number</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="+1 (815) 661-1544"
-                  {...form.register("phone")}
-                  aria-invalid={!!form.formState.errors.phone}
-                />
-                {form.formState.errors.phone && (
-                  <p className="text-sm text-destructive">
-                    {form.formState.errors.phone.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          </section>
-
-          {/* Section 3: Task interests */}
-          <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
-            <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-[family-name:var(--font-display)] text-sm font-bold text-primary-foreground">
-                3
-              </span>
-              <h2 className="text-xl font-semibold">AI task interests</h2>
-            </div>
-            <p className="mt-1 pl-11 text-sm text-muted-foreground">
-              Pick the tasks that sound interesting. You can change your mind later.
-            </p>
-
-            <div className="mt-6 space-y-4">
-              {taskOptions.map((option) => {
-                const checked = form.watch("interests").includes(option.id);
-                return (
-                  <label
-                    key={option.id}
-                    className={`flex cursor-pointer items-start gap-4 rounded-xl border p-4 transition-colors ${
-                      checked
-                        ? "border-primary bg-primary/10"
-                        : "border-border bg-transparent hover:bg-accent/50"
-                    }`}
+                  <a
+                    href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                      `Hi Taskora, I completed my details. My support ticket is #${ticketNumber}.`,
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2"
                   >
-                    <Checkbox
-                      checked={checked}
-                      onCheckedChange={(isChecked) => {
-                        const current = form.getValues("interests");
-                        if (isChecked) {
-                          form.setValue("interests", [...current, option.id], {
-                            shouldValidate: true,
-                          });
-                        } else {
-                          form.setValue(
-                            "interests",
-                            current.filter((id) => id !== option.id),
-                            { shouldValidate: true },
-                          );
-                        }
-                      }}
-                      className="mt-0.5"
-                    />
-                    <div>
-                      <p className="font-semibold text-foreground">{option.label}</p>
-                      <p className="text-sm text-muted-foreground">{option.description}</p>
-                    </div>
-                  </label>
-                );
-              })}
-              {form.formState.errors.interests && (
-                <p className="text-sm text-destructive">
-                  {form.formState.errors.interests.message}
-                </p>
-              )}
+                    <MessageCircle className="h-5 w-5" />
+                    Message us on WhatsApp
+                  </a>
+                </Button>
+                <Button
+                  variant="outline"
+                  asChild
+                  className="flex-1 rounded-full py-5 text-base font-semibold"
+                >
+                  <a
+                    href="mailto:heknowyou69@gmail.com?subject=Taskora%20application"
+                    className="inline-flex items-center justify-center gap-2"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Email us instead
+                  </a>
+                </Button>
+              </div>
             </div>
-          </section>
 
-          <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
-            <Button
-              type="submit"
-              className="glow-ring w-full rounded-full bg-primary py-6 text-base font-bold text-primary-foreground transition-transform hover:-translate-y-0.5"
-            >
-              Send my application on WhatsApp
-            </Button>
-            <p className="mt-4 text-center text-sm text-muted-foreground">
-              Submitting opens WhatsApp with your details prefilled. You can edit the message before
-              sending.
-            </p>
+            <div className="text-center">
+              <Link
+                to="/"
+                className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to home
+              </Link>
+            </div>
           </div>
-        </form>
+        ) : (
+          <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 space-y-10">
+            {/* Section 1: Personal details */}
+            <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+              <div className="flex items-center gap-3">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-[family-name:var(--font-display)] text-sm font-bold text-primary-foreground">
+                  1
+                </span>
+                <h2 className="text-xl font-semibold">Personal details</h2>
+              </div>
+              <p className="mt-1 pl-11 text-sm text-muted-foreground">
+                We use this to personalize your onboarding and match you with the right tasks.
+              </p>
+
+              <div className="mt-6 space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Full name</Label>
+                  <Input
+                    id="name"
+                    placeholder="Jane Doe"
+                    {...form.register("name")}
+                    aria-invalid={!!form.formState.errors.name}
+                  />
+                  {form.formState.errors.name && (
+                    <p className="text-sm text-destructive">{form.formState.errors.name.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="gender">Gender</Label>
+                  <Select
+                    value={form.watch("gender")}
+                    onValueChange={(value) =>
+                      form.setValue("gender", value as FormValues["gender"], { shouldValidate: true })
+                    }
+                  >
+                    <SelectTrigger id="gender" aria-invalid={!!form.formState.errors.gender}>
+                      <SelectValue placeholder="Select your gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="non-binary">Non-binary</SelectItem>
+                      <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {form.formState.errors.gender && (
+                    <p className="text-sm text-destructive">
+                      {form.formState.errors.gender.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="jane@example.com"
+                    {...form.register("email")}
+                    aria-invalid={!!form.formState.errors.email}
+                  />
+                  {form.formState.errors.email && (
+                    <p className="text-sm text-destructive">
+                      {form.formState.errors.email.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            {/* Section 2: Location & contact */}
+            <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+              <div className="flex items-center gap-3">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-[family-name:var(--font-display)] text-sm font-bold text-primary-foreground">
+                  2
+                </span>
+                <h2 className="text-xl font-semibold">Location & contact</h2>
+              </div>
+              <p className="mt-1 pl-11 text-sm text-muted-foreground">
+                Taskora is open to US residents. We need a phone number so we can reach you on
+                WhatsApp.
+              </p>
+
+              <div className="mt-6 space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="city">City of residence (US)</Label>
+                  <Input
+                    id="city"
+                    placeholder="Austin, Texas"
+                    {...form.register("city")}
+                    aria-invalid={!!form.formState.errors.city}
+                  />
+                  {form.formState.errors.city && (
+                    <p className="text-sm text-destructive">{form.formState.errors.city.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone number</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="+1 (815) 661-1544"
+                    {...form.register("phone")}
+                    aria-invalid={!!form.formState.errors.phone}
+                  />
+                  {form.formState.errors.phone && (
+                    <p className="text-sm text-destructive">
+                      {form.formState.errors.phone.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            {/* Section 3: Task interests */}
+            <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+              <div className="flex items-center gap-3">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-[family-name:var(--font-display)] text-sm font-bold text-primary-foreground">
+                  3
+                </span>
+                <h2 className="text-xl font-semibold">AI task interests</h2>
+              </div>
+              <p className="mt-1 pl-11 text-sm text-muted-foreground">
+                Pick the tasks that sound interesting. You can change your mind later.
+              </p>
+
+              <div className="mt-6 space-y-4">
+                {taskOptions.map((option) => {
+                  const checked = form.watch("interests").includes(option.id);
+                  return (
+                    <label
+                      key={option.id}
+                      className={`flex cursor-pointer items-start gap-4 rounded-xl border p-4 transition-colors ${
+                        checked
+                          ? "border-primary bg-primary/10"
+                          : "border-border bg-transparent hover:bg-accent/50"
+                      }`}
+                    >
+                      <Checkbox
+                        checked={checked}
+                        onCheckedChange={(isChecked) => {
+                          const current = form.getValues("interests");
+                          if (isChecked) {
+                            form.setValue("interests", [...current, option.id], {
+                              shouldValidate: true,
+                            });
+                          } else {
+                            form.setValue(
+                              "interests",
+                              current.filter((id) => id !== option.id),
+                              { shouldValidate: true },
+                            );
+                          }
+                        }}
+                        className="mt-0.5"
+                      />
+                      <div>
+                        <p className="font-semibold text-foreground">{option.label}</p>
+                        <p className="text-sm text-muted-foreground">{option.description}</p>
+                      </div>
+                    </label>
+                  );
+                })}
+                {form.formState.errors.interests && (
+                  <p className="text-sm text-destructive">
+                    {form.formState.errors.interests.message}
+                  </p>
+                )}
+              </div>
+            </section>
+
+            <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+              <Button
+                type="submit"
+                className="glow-ring w-full rounded-full bg-primary py-6 text-base font-bold text-primary-foreground transition-transform hover:-translate-y-0.5"
+              >
+                Send my application on WhatsApp
+              </Button>
+              <p className="mt-4 text-center text-sm text-muted-foreground">
+                Submitting opens WhatsApp with your details prefilled. You can edit the message before
+                sending.
+              </p>
+            </div>
+          </form>
+        )}
 
         <footer className="mt-12 border-t border-border pt-8 text-sm text-muted-foreground">
           <p>
