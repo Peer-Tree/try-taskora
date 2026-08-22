@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImage from "@/assets/hero-phone.jpg";
 
 const WHATSAPP_URL = "https://wa.me/18156611544?text=Hi%20Taskora%2C%20I%27d%20like%20to%20start%20doing%20AI%20tasks";
