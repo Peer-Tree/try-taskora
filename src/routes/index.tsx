@@ -90,19 +90,19 @@ function Index() {
               </p>
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  to="/get-started"
+                  className="glow-ring inline-flex items-center justify-center rounded-full bg-primary px-7 py-4 text-base font-bold text-primary-foreground transition-transform hover:-translate-y-0.5"
+                >
+                  Get started
+                </Link>
                 <a
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="glow-ring inline-flex items-center justify-center rounded-full bg-primary px-7 py-4 text-base font-bold text-primary-foreground transition-transform hover:-translate-y-0.5"
-                >
-                  Start on WhatsApp
-                </a>
-                <a
-                  href={EMAIL_URL}
                   className="inline-flex items-center justify-center rounded-full border border-border px-7 py-4 text-base font-semibold text-foreground transition-colors hover:bg-secondary"
                 >
-                  Email us instead
+                  Message us on WhatsApp
                 </a>
               </div>
               <p className="mt-4 text-sm text-muted-foreground">
@@ -176,19 +176,19 @@ function Index() {
             Send us a message and we'll get you onboarded, usually within 24 hours.
           </p>
           <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              to="/get-started"
+              className="glow-ring inline-flex items-center justify-center rounded-full bg-primary px-8 py-4 text-base font-bold text-primary-foreground transition-transform hover:-translate-y-0.5"
+            >
+              Get started
+            </Link>
             <a
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="glow-ring inline-flex items-center justify-center rounded-full bg-primary px-8 py-4 text-base font-bold text-primary-foreground transition-transform hover:-translate-y-0.5"
-            >
-              WhatsApp +1 (815) 661-1544
-            </a>
-            <a
-              href={EMAIL_URL}
               className="inline-flex items-center justify-center rounded-full border border-border px-8 py-4 text-base font-semibold transition-colors hover:bg-secondary"
             >
-              heknowyou69@gmail.com
+              WhatsApp +1 (815) 661-1544
             </a>
           </div>
         </div>
