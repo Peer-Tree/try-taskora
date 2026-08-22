@@ -82,7 +82,14 @@ export const Route = createFileRoute("/get-started")({
   component: GetStartedPage,
 });
 
+function generateTicketNumber(): string {
+  return Math.floor(10000000 + Math.random() * 90000000).toString();
+}
+
 function GetStartedPage() {
+  const [submitted, setSubmitted] = useState(false);
+  const [ticketNumber, setTicketNumber] = useState("");
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -95,6 +102,9 @@ function GetStartedPage() {
   });
 
   const onSubmit: SubmitHandler<FormValues> = (values) => {
+    const ticket = generateTicketNumber();
+    setTicketNumber(ticket);
+
     const interestLabels = values.interests
       .map((id) => taskOptions.find((t) => t.id === id)?.label)
       .filter(Boolean)
@@ -103,6 +113,7 @@ function GetStartedPage() {
     const message = [
       `Hi Taskora, I'd like to start doing AI tasks.`,
       ``,
+      `*Support Ticket #:* ${ticket}`,
       `*Name:* ${values.name}`,
       `*Gender:* ${values.gender}`,
       `*Email:* ${values.email}`,
@@ -113,6 +124,7 @@ function GetStartedPage() {
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank", "noopener,noreferrer");
+    setSubmitted(true);
   }
 
   return (
