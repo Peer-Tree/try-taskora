@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
-import { ArrowLeft, Clock, MessageCircle, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowLeft, Clock, MessageCircle, ShieldCheck, Sparkles, CheckCircle2, ExternalLink } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
