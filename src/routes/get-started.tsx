@@ -93,7 +93,7 @@ function GetStartedPage() {
     },
   });
 
-  function onSubmit(values: FormValues) {
+  const onSubmit: SubmitHandler<FormValues> = (values) => {
     const interestLabels = values.interests
       .map((id) => taskOptions.find((t) => t.id === id)?.label)
       .filter(Boolean)
