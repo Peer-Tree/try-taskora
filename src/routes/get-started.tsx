@@ -384,13 +384,26 @@ function GetStartedPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone number</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+1 (815) 661-1544"
-                    {...form.register("phone")}
-                    aria-invalid={!!form.formState.errors.phone}
-                  />
+                  <div className="flex overflow-hidden rounded-xl border border-input bg-background focus-within:ring-1 focus-within:ring-ring">
+                    <span className="flex shrink-0 items-center border-r border-input bg-muted/50 px-3 py-2 text-sm font-medium text-muted-foreground">
+                      +1
+                    </span>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      inputMode="tel"
+                      placeholder="(815) 661-1544"
+                      className="rounded-none border-0 bg-transparent px-3 py-2 focus-visible:ring-0 focus-visible:ring-offset-0"
+                      value={displayPhoneNumber(form.watch("phone"))}
+                      onChange={(e) => {
+                        const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+                        form.setValue("phone", normalizePhoneNumber(digits), {
+                          shouldValidate: true,
+                        });
+                      }}
+                      aria-invalid={!!form.formState.errors.phone}
+                    />
+                  </div>
                   {form.formState.errors.phone && (
                     <p className="text-sm text-destructive">
                       {form.formState.errors.phone.message}
