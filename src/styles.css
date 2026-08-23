@@ -100,7 +100,8 @@
   --sidebar-border: oklch(0.32 0.03 152);
   --sidebar-ring: oklch(0.87 0.24 148);
   --gradient-lime: linear-gradient(135deg, var(--primary), var(--primary-glow));
-  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--primary) 25%, transparent),
+  --shadow-glow:
+    0 0 0 1px color-mix(in oklab, var(--primary) 25%, transparent),
     0 20px 60px -20px color-mix(in oklab, var(--primary) 45%, transparent);
 }
 
@@ -137,4 +138,3 @@
   background-clip: text;
   color: transparent;
 }
-
