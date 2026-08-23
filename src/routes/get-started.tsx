@@ -62,7 +62,9 @@ const formSchema = z.object({
   }),
   email: z.string().email("Please enter a valid email address."),
   city: z.string().min(2, "Please enter your city of residence."),
-  phone: z.string().min(10, "Please enter a valid US phone number."),
+  phone: z.string().refine((val) => val.replace(/\D/g, "").length === 10, {
+    message: "Please enter a valid US phone number.",
+  }),
   interests: z.array(z.string()).min(1, "Please choose at least one task type."),
 });
 
