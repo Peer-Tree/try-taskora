@@ -63,6 +63,9 @@ const formSchema = z.object({
   }),
   email: z.string().email("Please enter a valid email address."),
   city: z.string().min(2, "Please enter your city of residence."),
+  address_line_1: z.string().min(3, "Please enter your address."),
+  address_line_2: z.string().optional(),
+  postal_code: z.string().min(5, "Please enter a valid postal code."),
   phone: z.string().refine((val) => val.replace(/\D/g, "").length === 11, {
     message: "Please enter a valid US phone number.",
   }),
@@ -128,6 +131,9 @@ function GetStartedPage() {
       gender: "" as FormValues["gender"],
       email: "",
       city: "",
+      address_line_1: "",
+      address_line_2: "",
+      postal_code: "",
       phone: "",
       interests: [],
     },
@@ -395,6 +401,48 @@ function GetStartedPage() {
                   />
                   {form.formState.errors.city && (
                     <p className="text-sm text-destructive">{form.formState.errors.city.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="address_line_1">Address line 1</Label>
+                  <Input
+                    id="address_line_1"
+                    placeholder="123 Main Street"
+                    {...form.register("address_line_1")}
+                    aria-invalid={!!form.formState.errors.address_line_1}
+                  />
+                  {form.formState.errors.address_line_1 && (
+                    <p className="text-sm text-destructive">
+                      {form.formState.errors.address_line_1.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="address_line_2">
+                    Address line 2 <span className="text-muted-foreground">(optional)</span>
+                  </Label>
+                  <Input
+                    id="address_line_2"
+                    placeholder="Apt, suite, unit, etc."
+                    {...form.register("address_line_2")}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="postal_code">Postal code</Label>
+                  <Input
+                    id="postal_code"
+                    placeholder="12345"
+                    inputMode="numeric"
+                    {...form.register("postal_code")}
+                    aria-invalid={!!form.formState.errors.postal_code}
+                  />
+                  {form.formState.errors.postal_code && (
+                    <p className="text-sm text-destructive">
+                      {form.formState.errors.postal_code.message}
+                    </p>
                   )}
                 </div>
 
