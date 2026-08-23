@@ -240,7 +240,7 @@ function GetStartedPage() {
                   className="flex-1 rounded-full py-5 text-base font-semibold"
                 >
                   <a
-                    href="mailto:heknowyou69@gmail.com?subject=Taskora%20application"
+                    href="mailto:jointaskora@gmail.com?subject=Taskora%20application"
                     className="inline-flex items-center justify-center gap-2"
                   >
                     <ExternalLink className="h-4 w-4" />
@@ -454,10 +454,10 @@ function GetStartedPage() {
           <p>
             Prefer email?{" "}
             <a
-              href="mailto:heknowyou69@gmail.com?subject=Taskora%20application"
+              href="mailto:jointaskora@gmail.com?subject=Taskora%20application"
               className="text-primary hover:underline"
             >
-              heknowyou69@gmail.com
+              jointaskora@gmail.com
             </a>
           </p>
           <p className="mt-1">© {new Date().getFullYear()} Taskora</p>
