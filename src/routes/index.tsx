@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImage from "@/assets/hero-phone.jpg";
 
-const WHATSAPP_URL = "https://wa.me/18156611544?text=Hi%20Taskora%2C%20I%27d%20like%20to%20start%20doing%20AI%20tasks";
+const WHATSAPP_URL =
+  "https://wa.me/18156611544?text=Hi%20Taskora%2C%20I%27d%20like%20to%20start%20doing%20AI%20tasks";
 const EMAIL_URL =
   "mailto:heknowyou69@gmail.com?subject=Taskora%20application&body=Hi%20Taskora%2C%20I%27d%20like%20to%20start%20doing%20AI%20tasks.";
 
@@ -51,9 +52,21 @@ const steps = [
 ];
 
 const tiers = [
-  { rate: "$15", label: "Starter tasks", body: "Rating and comparing AI responses, simple image and audio labeling." },
-  { rate: "$20", label: "Standard tasks", body: "Prompt writing, transcript review, longer evaluation batches." },
-  { rate: "$25", label: "Specialist tasks", body: "Domain work — coding, finance, medical, or second-language review." },
+  {
+    rate: "$15",
+    label: "Starter tasks",
+    body: "Rating and comparing AI responses, simple image and audio labeling.",
+  },
+  {
+    rate: "$20",
+    label: "Standard tasks",
+    body: "Prompt writing, transcript review, longer evaluation batches.",
+  },
+  {
+    rate: "$25",
+    label: "Specialist tasks",
+    body: "Domain work — coding, finance, medical, or second-language review.",
+  },
 ];
 
 function Index() {
@@ -128,8 +141,8 @@ function Index() {
         <div className="mx-auto max-w-6xl px-6 py-20">
           <h2 className="text-3xl font-bold md:text-4xl">What the pay looks like</h2>
           <p className="mt-3 max-w-xl text-muted-foreground">
-            Your hourly rate depends on the task type. Most people start at $15 and move up as
-            their accuracy score rises.
+            Your hourly rate depends on the task type. Most people start at $15 and move up as their
+            accuracy score rises.
           </p>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {tiers.map((t) => (

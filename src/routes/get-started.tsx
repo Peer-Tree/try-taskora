@@ -2,7 +2,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
-import { ArrowLeft, Clock, MessageCircle, ShieldCheck, Sparkles, CheckCircle2, ExternalLink } from "lucide-react";
+import {
+  ArrowLeft,
+  Clock,
+  MessageCircle,
+  ShieldCheck,
+  Sparkles,
+  CheckCircle2,
+  ExternalLink,
+} from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -94,6 +102,7 @@ function GetStartedPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      gender: "" as FormValues["gender"],
       email: "",
       city: "",
       phone: "",
@@ -125,7 +134,7 @@ function GetStartedPage() {
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank", "noopener,noreferrer");
     setSubmitted(true);
-  }
+  };
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -148,9 +157,16 @@ function GetStartedPage() {
 
           <h1 className="mt-4 text-3xl font-bold md:text-5xl">
             {submitted ? (
-              <>You're on the list, <span className="text-gradient-lime">{form.getValues("name").split(" ")[0] || "friend"}</span></>
+              <>
+                You're on the list,{" "}
+                <span className="text-gradient-lime">
+                  {form.getValues("name").split(" ")[0] || "friend"}
+                </span>
+              </>
             ) : (
-              <>Get started with <span className="text-gradient-lime">Taskora</span></>
+              <>
+                Get started with <span className="text-gradient-lime">Taskora</span>
+              </>
             )}
           </h1>
           <p className="mt-3 max-w-xl text-muted-foreground">
@@ -188,8 +204,8 @@ function GetStartedPage() {
                   <h2 className="text-lg font-semibold">Application received</h2>
                   <p className="mt-1 text-sm text-muted-foreground">
                     Your support ticket number is{" "}
-                    <span className="font-mono font-semibold text-foreground">#{ticketNumber}</span>.
-                    Keep it handy for faster support.
+                    <span className="font-mono font-semibold text-foreground">#{ticketNumber}</span>
+                    . Keep it handy for faster support.
                   </p>
                 </div>
               </div>
@@ -198,7 +214,8 @@ function GetStartedPage() {
             <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
               <h3 className="text-lg font-semibold">Want to speed up the process?</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                Message us on WhatsApp and we'll review your details right away. Your ticket number is already included.
+                Message us on WhatsApp and we'll review your details right away. Your ticket number
+                is already included.
               </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <Button
@@ -274,9 +291,11 @@ function GetStartedPage() {
                 <div className="space-y-2">
                   <Label htmlFor="gender">Gender</Label>
                   <Select
-                    value={form.watch("gender")}
+                    value={form.watch("gender") || ""}
                     onValueChange={(value) =>
-                      form.setValue("gender", value as FormValues["gender"], { shouldValidate: true })
+                      form.setValue("gender", value as FormValues["gender"], {
+                        shouldValidate: true,
+                      })
                     }
                   >
                     <SelectTrigger id="gender" aria-invalid={!!form.formState.errors.gender}>
@@ -424,8 +443,8 @@ function GetStartedPage() {
                 Send my application on WhatsApp
               </Button>
               <p className="mt-4 text-center text-sm text-muted-foreground">
-                Submitting opens WhatsApp with your details prefilled. You can edit the message before
-                sending.
+                Submitting opens WhatsApp with your details prefilled. You can edit the message
+                before sending.
               </p>
             </div>
           </form>
