@@ -96,6 +96,26 @@ function generateTicketNumber(): string {
   return Math.floor(10000000 + Math.random() * 90000000).toString();
 }
 
+function formatUSPhoneNumber(input: string): string {
+  const digits = input.replace(/\D/g, "").slice(0, 10);
+  const area = digits.slice(0, 3);
+  const prefix = digits.slice(3, 6);
+  const line = digits.slice(6, 10);
+
+  if (digits.length > 6) return `(${area}) ${prefix}-${line}`;
+  if (digits.length > 3) return `(${area}) ${prefix}`;
+  if (digits.length > 0) return `(${area}`;
+  return "";
+}
+
+function normalizePhoneNumber(input: string): string {
+  return `+1${input.replace(/\D/g, "").slice(0, 10)}`;
+}
+
+function displayPhoneNumber(input: string): string {
+  return formatUSPhoneNumber(input.replace(/^\+1/, ""));
+}
+
 function GetStartedPage() {
   const [submitted, setSubmitted] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
