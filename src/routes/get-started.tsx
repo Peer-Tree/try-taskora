@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { supabase } from '@/lib/supabase'
 
 const WHATSAPP_NUMBER = "18156611544";
 
@@ -132,7 +133,7 @@ function GetStartedPage() {
     },
   });
 
-  const onSubmit: SubmitHandler<FormValues> = (values) => {
+  const onSubmit: SubmitHandler<FormValues> = async (values) => {
     const ticket = generateTicketNumber();
     setTicketNumber(ticket);
 
@@ -152,6 +153,21 @@ function GetStartedPage() {
       `*Phone:* ${displayPhoneNumber(values.phone)}`,
       `*Interested in:* ${interestLabels}`,
     ].join("\n");
+
+    const { error } = await supabase
+      .from('early_users')
+      .insert({
+        name: values.name,
+        email: values.email,
+        gender: values.gender,
+        phone: values.phone,
+        country: "US",
+        city: values.city,
+      })
+
+    if (error) {
+      console.error(error)
+    }
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank", "noopener,noreferrer");
