@@ -94,6 +94,7 @@ function GetStartedPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      gender: "" as FormValues["gender"],
       email: "",
       city: "",
       phone: "",
