@@ -62,7 +62,9 @@ const formSchema = z.object({
   }),
   email: z.string().email("Please enter a valid email address."),
   city: z.string().min(2, "Please enter your city of residence."),
-  phone: z.string().min(10, "Please enter a valid US phone number."),
+  phone: z.string().refine((val) => val.replace(/\D/g, "").length === 10, {
+    message: "Please enter a valid US phone number.",
+  }),
   interests: z.array(z.string()).min(1, "Please choose at least one task type."),
 });
 
@@ -92,6 +94,26 @@ export const Route = createFileRoute("/get-started")({
 
 function generateTicketNumber(): string {
   return Math.floor(10000000 + Math.random() * 90000000).toString();
+}
+
+function formatUSPhoneNumber(input: string): string {
+  const digits = input.replace(/\D/g, "").slice(0, 10);
+  const area = digits.slice(0, 3);
+  const prefix = digits.slice(3, 6);
+  const line = digits.slice(6, 10);
+
+  if (digits.length > 6) return `(${area}) ${prefix}-${line}`;
+  if (digits.length > 3) return `(${area}) ${prefix}`;
+  if (digits.length > 0) return `(${area}`;
+  return "";
+}
+
+function normalizePhoneNumber(input: string): string {
+  return `+1${input.replace(/\D/g, "").slice(0, 10)}`;
+}
+
+function displayPhoneNumber(input: string): string {
+  return formatUSPhoneNumber(input.replace(/^\+1/, ""));
 }
 
 function GetStartedPage() {
@@ -127,7 +149,7 @@ function GetStartedPage() {
       `*Gender:* ${values.gender}`,
       `*Email:* ${values.email}`,
       `*City:* ${values.city}`,
-      `*Phone:* ${values.phone}`,
+      `*Phone:* ${displayPhoneNumber(values.phone)}`,
       `*Interested in:* ${interestLabels}`,
     ].join("\n");
 
@@ -362,13 +384,26 @@ function GetStartedPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone number</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+1 (815) 661-1544"
-                    {...form.register("phone")}
-                    aria-invalid={!!form.formState.errors.phone}
-                  />
+                  <div className="flex overflow-hidden rounded-xl border border-input bg-background focus-within:ring-1 focus-within:ring-ring">
+                    <span className="flex shrink-0 items-center border-r border-input bg-muted/50 px-3 py-2 text-sm font-medium text-muted-foreground">
+                      +1
+                    </span>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      inputMode="tel"
+                      placeholder="(815) 661-1544"
+                      className="rounded-none border-0 bg-transparent px-3 py-2 focus-visible:ring-0 focus-visible:ring-offset-0"
+                      value={displayPhoneNumber(form.watch("phone"))}
+                      onChange={(e) => {
+                        const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+                        form.setValue("phone", normalizePhoneNumber(digits), {
+                          shouldValidate: true,
+                        });
+                      }}
+                      aria-invalid={!!form.formState.errors.phone}
+                    />
+                  </div>
                   {form.formState.errors.phone && (
                     <p className="text-sm text-destructive">
                       {form.formState.errors.phone.message}
