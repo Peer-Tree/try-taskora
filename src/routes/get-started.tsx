@@ -274,12 +274,12 @@ function GetStartedPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="gender">Gender</Label>
-                  <Select
-                    value={form.watch("gender")}
-                    onValueChange={(value) =>
-                      form.setValue("gender", value as FormValues["gender"], { shouldValidate: true })
-                    }
-                  >
+                <Select
+                  value={form.watch("gender") || ""}
+                  onValueChange={(value) =>
+                    form.setValue("gender", value as FormValues["gender"], { shouldValidate: true })
+                  }
+                >
                     <SelectTrigger id="gender" aria-invalid={!!form.formState.errors.gender}>
                       <SelectValue placeholder="Select your gender" />
                     </SelectTrigger>
