@@ -155,7 +155,7 @@ function GetStartedPage() {
     ].join("\n");
 
     const { error } = await supabase
-      .from('early_users')
+      .from('users')
       .insert({
         name: values.name,
         email: values.email,
