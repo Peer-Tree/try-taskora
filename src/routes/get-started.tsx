@@ -149,7 +149,7 @@ function GetStartedPage() {
       `*Gender:* ${values.gender}`,
       `*Email:* ${values.email}`,
       `*City:* ${values.city}`,
-      `*Phone:* ${values.phone}`,
+      `*Phone:* ${displayPhoneNumber(values.phone)}`,
       `*Interested in:* ${interestLabels}`,
     ].join("\n");
 
