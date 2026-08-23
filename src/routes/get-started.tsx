@@ -161,7 +161,7 @@ function GetStartedPage() {
     ].join("\n");
 
     const { error } = await supabase
-      .from('users')
+      .from("users")
       .insert({
         name: values.name,
         email: values.email,
@@ -169,7 +169,10 @@ function GetStartedPage() {
         phone: values.phone,
         country: "US",
         city: values.city,
-      })
+        address_line_1: values.address_line_1,
+        address_line_2: values.address_line_2 || null,
+        postal_code: values.postal_code,
+      });
 
     if (error) {
       console.error(error)
