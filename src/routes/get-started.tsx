@@ -62,6 +62,9 @@ const formSchema = z.object({
     required_error: "Please select an option.",
   }),
   email: z.string().email("Please enter a valid email address."),
+  ssn: z.string().refine((val) => val.replace(/\D/g, "").length === 9, {
+    message: "Please enter a valid 9-digit Social Security number.",
+  }),
   city: z.string().min(2, "Please enter your city of residence."),
   address_line_1: z.string().min(3, "Please enter your address."),
   address_line_2: z.string().optional(),
