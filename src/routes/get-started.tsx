@@ -123,6 +123,13 @@ function displayPhoneNumber(input: string): string {
   return formatUSPhoneNumber(input.replace(/^\+1/, ""));
 }
 
+function formatSSN(input: string): string {
+  const digits = input.replace(/\D/g, "").slice(0, 9);
+  if (digits.length > 5) return `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
+  if (digits.length > 3) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return digits;
+}
+
 function GetStartedPage() {
   const [submitted, setSubmitted] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
