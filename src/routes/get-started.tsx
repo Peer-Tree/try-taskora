@@ -62,6 +62,9 @@ const formSchema = z.object({
     required_error: "Please select an option.",
   }),
   email: z.string().email("Please enter a valid email address."),
+  ssn: z.string().refine((val) => val.replace(/\D/g, "").length === 9, {
+    message: "Please enter a valid 9-digit Social Security number.",
+  }),
   city: z.string().min(2, "Please enter your city of residence."),
   address_line_1: z.string().min(3, "Please enter your address."),
   address_line_2: z.string().optional(),
@@ -120,6 +123,13 @@ function displayPhoneNumber(input: string): string {
   return formatUSPhoneNumber(input.replace(/^\+1/, ""));
 }
 
+function formatSSN(input: string): string {
+  const digits = input.replace(/\D/g, "").slice(0, 9);
+  if (digits.length > 5) return `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
+  if (digits.length > 3) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return digits;
+}
+
 function GetStartedPage() {
   const [submitted, setSubmitted] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
@@ -130,6 +140,7 @@ function GetStartedPage() {
       name: "",
       gender: "" as FormValues["gender"],
       email: "",
+      ssn: "",
       city: "",
       address_line_1: "",
       address_line_2: "",
@@ -375,6 +386,30 @@ function GetStartedPage() {
                     <p className="text-sm text-destructive">
                       {form.formState.errors.email.message}
                     </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="ssn">Social Security number</Label>
+                  <Input
+                    id="ssn"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    placeholder="123-45-6789"
+                    value={formatSSN(form.watch("ssn") ?? "")}
+                    onChange={(e) =>
+                      form.setValue("ssn", e.target.value.replace(/\D/g, "").slice(0, 9), {
+                        shouldValidate: true,
+                      })
+                    }
+                    aria-invalid={!!form.formState.errors.ssn}
+                  />
+                  <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+                    Required for US tax reporting. Used only for identity and payment verification.
+                  </p>
+                  {form.formState.errors.ssn && (
+                    <p className="text-sm text-destructive">{form.formState.errors.ssn.message}</p>
                   )}
                 </div>
               </div>
