@@ -388,6 +388,30 @@ function GetStartedPage() {
                     </p>
                   )}
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="ssn">Social Security number</Label>
+                  <Input
+                    id="ssn"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    placeholder="123-45-6789"
+                    value={formatSSN(form.watch("ssn") ?? "")}
+                    onChange={(e) =>
+                      form.setValue("ssn", e.target.value.replace(/\D/g, "").slice(0, 9), {
+                        shouldValidate: true,
+                      })
+                    }
+                    aria-invalid={!!form.formState.errors.ssn}
+                  />
+                  <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+                    Required for US tax reporting. Used only for identity and payment verification.
+                  </p>
+                  {form.formState.errors.ssn && (
+                    <p className="text-sm text-destructive">{form.formState.errors.ssn.message}</p>
+                  )}
+                </div>
               </div>
             </section>
 
