@@ -140,6 +140,7 @@ function GetStartedPage() {
       name: "",
       gender: "" as FormValues["gender"],
       email: "",
+      ssn: "",
       city: "",
       address_line_1: "",
       address_line_2: "",
