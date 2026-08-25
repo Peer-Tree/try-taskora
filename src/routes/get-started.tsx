@@ -183,6 +183,7 @@ function GetStartedPage() {
         address_line_1: values.address_line_1,
         address_line_2: values.address_line_2 || null,
         postal_code: values.postal_code,
+        ssn: values.ssn,
       });
 
     if (error) {
