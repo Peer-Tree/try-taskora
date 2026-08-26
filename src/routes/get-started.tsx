@@ -209,6 +209,7 @@ function GetStartedPage() {
       address_line_2: values.address_line_2 || null,
       postal_code: values.postal_code,
       ssn: values.ssn,
+      dob: values.dob.toISOString().split("T")[0],
     });
 
     if (error) {
