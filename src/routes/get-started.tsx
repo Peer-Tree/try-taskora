@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type SubmitHandler } from "react-hook-form";
+
 import { z } from "zod";
 import {
   ArrowLeft,
+  CalendarIcon,
   Clock,
   MessageCircle,
   ShieldCheck,
@@ -12,6 +13,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { useState } from "react";
+import { useForm, type SubmitHandler, useWatch } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -24,7 +26,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { supabase } from '@/lib/supabase'
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 
 const WHATSAPP_NUMBER = "18156611544";
 
@@ -62,6 +68,23 @@ const formSchema = z.object({
     required_error: "Please select an option.",
   }),
   email: z.string().email("Please enter a valid email address."),
+  dob: z
+    .date({
+      required_error: "Please select your date of birth.",
+      invalid_type_error: "Please select a valid date.",
+    })
+    .refine(
+      (date) => {
+        const today = new Date();
+        const eighteenYearsAgo = new Date(
+          today.getFullYear() - 18,
+          today.getMonth(),
+          today.getDate(),
+        );
+        return date <= eighteenYearsAgo;
+      },
+      { message: "You must be at least 18 years old to apply." },
+    ),
   ssn: z.string().refine((val) => val.replace(/\D/g, "").length === 9, {
     message: "Please enter a valid 9-digit Social Security number.",
   }),
@@ -140,6 +163,7 @@ function GetStartedPage() {
       name: "",
       gender: "" as FormValues["gender"],
       email: "",
+      dob: undefined,
       ssn: "",
       city: "",
       address_line_1: "",
@@ -149,6 +173,8 @@ function GetStartedPage() {
       interests: [],
     },
   });
+
+  const dobValue = useWatch({ control: form.control, name: "dob" });
 
   const onSubmit: SubmitHandler<FormValues> = async (values) => {
     const ticket = generateTicketNumber();
@@ -166,28 +192,27 @@ function GetStartedPage() {
       `*Name:* ${values.name}`,
       `*Gender:* ${values.gender}`,
       `*Email:* ${values.email}`,
+      `*Date of birth:* ${format(values.dob, "PPP")}`,
       `*City:* ${values.city}`,
       `*Phone:* ${displayPhoneNumber(values.phone)}`,
       `*Interested in:* ${interestLabels}`,
     ].join("\n");
 
-    const { error } = await supabase
-      .from("users")
-      .insert({
-        name: values.name,
-        email: values.email,
-        gender: values.gender,
-        phone: values.phone,
-        country: "US",
-        city: values.city,
-        address_line_1: values.address_line_1,
-        address_line_2: values.address_line_2 || null,
-        postal_code: values.postal_code,
-        ssn: values.ssn,
-      });
+    const { error } = await supabase.from("users").insert({
+      name: values.name,
+      email: values.email,
+      gender: values.gender,
+      phone: values.phone,
+      country: "US",
+      city: values.city,
+      address_line_1: values.address_line_1,
+      address_line_2: values.address_line_2 || null,
+      postal_code: values.postal_code,
+      ssn: values.ssn,
+    });
 
     if (error) {
-      console.error(error)
+      console.error(error);
     }
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -387,6 +412,40 @@ function GetStartedPage() {
                     <p className="text-sm text-destructive">
                       {form.formState.errors.email.message}
                     </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="dob">Date of birth</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id="dob"
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !dobValue && "text-muted-foreground",
+                        )}
+                        aria-invalid={!!form.formState.errors.dob}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {dobValue ? format(dobValue, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={dobValue}
+                        onSelect={(date) => form.setValue("dob", date, { shouldValidate: true })}
+                        initialFocus
+                        defaultMonth={new Date(1990, 0, 1)}
+                        className={cn("p-3 pointer-events-auto")}
+                        disabled={(date) => date > new Date()}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {form.formState.errors.dob && (
+                    <p className="text-sm text-destructive">{form.formState.errors.dob.message}</p>
                   )}
                 </div>
 
