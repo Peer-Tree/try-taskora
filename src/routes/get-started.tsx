@@ -13,7 +13,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { useState } from "react";
-import { useForm, type SubmitHandler, useWatch } from "react-hook-form";
+import { useForm, useWatch, type DefaultValues } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -153,30 +153,30 @@ function formatSSN(input: string): string {
   return digits;
 }
 
+const defaultValues: DefaultValues<FormValues> = {
+  name: "",
+  email: "",
+  ssn: "",
+  city: "",
+  address_line_1: "",
+  address_line_2: "",
+  postal_code: "",
+  phone: "",
+  interests: [] as string[],
+};
+
 function GetStartedPage() {
   const [submitted, setSubmitted] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      gender: "" as FormValues["gender"],
-      email: "",
-      dob: undefined,
-      ssn: "",
-      city: "",
-      address_line_1: "",
-      address_line_2: "",
-      postal_code: "",
-      phone: "",
-      interests: [],
-    },
+    defaultValues,
   });
 
   const dobValue = useWatch({ control: form.control, name: "dob" });
 
-  const onSubmit: SubmitHandler<FormValues> = async (values) => {
+  const onSubmit = form.handleSubmit(async (values) => {
     const ticket = generateTicketNumber();
     setTicketNumber(ticket);
 
@@ -218,7 +218,7 @@ function GetStartedPage() {
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank", "noopener,noreferrer");
     setSubmitted(true);
-  };
+  });
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -345,7 +345,7 @@ function GetStartedPage() {
             </div>
           </div>
         ) : (
-          <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 space-y-10">
+          <form onSubmit={onSubmit} className="mt-10 space-y-10">
             {/* Section 1: Personal details */}
             <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
               <div className="flex items-center gap-3">
@@ -436,7 +436,9 @@ function GetStartedPage() {
                       <Calendar
                         mode="single"
                         selected={dobValue}
-                        onSelect={(date) => form.setValue("dob", date, { shouldValidate: true })}
+                        onSelect={(date) =>
+                          date && form.setValue("dob", date, { shouldValidate: true })
+                        }
                         initialFocus
                         defaultMonth={new Date(1990, 0, 1)}
                         className={cn("p-3 pointer-events-auto")}
