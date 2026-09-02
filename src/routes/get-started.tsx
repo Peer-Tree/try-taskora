@@ -548,17 +548,45 @@ function GetStartedPage() {
               </p>
 
               <div className="mt-6 space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="city">City of residence (US)</Label>
-                  <Input
-                    id="city"
-                    placeholder="Austin, Texas"
-                    {...form.register("city")}
-                    aria-invalid={!!form.formState.errors.city}
-                  />
-                  {form.formState.errors.city && (
-                    <p className="text-sm text-destructive">{form.formState.errors.city.message}</p>
-                  )}
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="city">City of residence</Label>
+                    <Input
+                      id="city"
+                      placeholder="Austin"
+                      {...form.register("city")}
+                      aria-invalid={!!form.formState.errors.city}
+                    />
+                    {form.formState.errors.city && (
+                      <p className="text-sm text-destructive">{form.formState.errors.city.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="state">State</Label>
+                    <Select
+                      value={form.watch("state") || ""}
+                      onValueChange={(value) =>
+                        form.setValue("state", value, { shouldValidate: true })
+                      }
+                    >
+                      <SelectTrigger id="state" aria-invalid={!!form.formState.errors.state}>
+                        <SelectValue placeholder="Select your state" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {usStates.map((state) => (
+                          <SelectItem key={state} value={state}>
+                            {state}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {form.formState.errors.state && (
+                      <p className="text-sm text-destructive">
+                        {form.formState.errors.state.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-2">
