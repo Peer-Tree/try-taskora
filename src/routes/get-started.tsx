@@ -62,6 +62,59 @@ const taskOptions = [
   },
 ];
 
+const usStates = [
+  "Alabama",
+  "Alaska",
+  "Arizona",
+  "Arkansas",
+  "California",
+  "Colorado",
+  "Connecticut",
+  "Delaware",
+  "Florida",
+  "Georgia",
+  "Hawaii",
+  "Idaho",
+  "Illinois",
+  "Indiana",
+  "Iowa",
+  "Kansas",
+  "Kentucky",
+  "Louisiana",
+  "Maine",
+  "Maryland",
+  "Massachusetts",
+  "Michigan",
+  "Minnesota",
+  "Mississippi",
+  "Missouri",
+  "Montana",
+  "Nebraska",
+  "Nevada",
+  "New Hampshire",
+  "New Jersey",
+  "New Mexico",
+  "New York",
+  "North Carolina",
+  "North Dakota",
+  "Ohio",
+  "Oklahoma",
+  "Oregon",
+  "Pennsylvania",
+  "Rhode Island",
+  "South Carolina",
+  "South Dakota",
+  "Tennessee",
+  "Texas",
+  "Utah",
+  "Vermont",
+  "Virginia",
+  "Washington",
+  "West Virginia",
+  "Wisconsin",
+  "Wyoming",
+];
+
 const formSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
   gender: z.enum(["male", "female", "non-binary", "prefer-not-to-say"], {
@@ -89,6 +142,7 @@ const formSchema = z.object({
     message: "Please enter a valid 9-digit Social Security number.",
   }),
   city: z.string().min(2, "Please enter your city of residence."),
+  state: z.string().min(1, "Please select your state."),
   address_line_1: z.string().min(3, "Please enter your address."),
   address_line_2: z.string().optional(),
   postal_code: z.string().min(5, "Please enter a valid postal code."),
@@ -158,6 +212,7 @@ const defaultValues: DefaultValues<FormValues> = {
   email: "",
   ssn: "",
   city: "",
+  state: "",
   address_line_1: "",
   address_line_2: "",
   postal_code: "",
@@ -193,7 +248,7 @@ function GetStartedPage() {
       `*Gender:* ${values.gender}`,
       `*Email:* ${values.email}`,
       `*Date of birth:* ${format(values.dob, "PPP")}`,
-      `*City:* ${values.city}`,
+      `*City & State:* ${values.city}, ${values.state}`,
       `*Phone:* ${displayPhoneNumber(values.phone)}`,
       `*Interested in:* ${interestLabels}`,
     ].join("\n");
@@ -205,6 +260,7 @@ function GetStartedPage() {
       phone: values.phone,
       country: "US",
       city: values.city,
+      state: values.state,
       address_line_1: values.address_line_1,
       address_line_2: values.address_line_2 || null,
       postal_code: values.postal_code,
@@ -492,17 +548,47 @@ function GetStartedPage() {
               </p>
 
               <div className="mt-6 space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="city">City of residence (US)</Label>
-                  <Input
-                    id="city"
-                    placeholder="Austin, Texas"
-                    {...form.register("city")}
-                    aria-invalid={!!form.formState.errors.city}
-                  />
-                  {form.formState.errors.city && (
-                    <p className="text-sm text-destructive">{form.formState.errors.city.message}</p>
-                  )}
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="city">City of residence</Label>
+                    <Input
+                      id="city"
+                      placeholder="Austin"
+                      {...form.register("city")}
+                      aria-invalid={!!form.formState.errors.city}
+                    />
+                    {form.formState.errors.city && (
+                      <p className="text-sm text-destructive">
+                        {form.formState.errors.city.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="state">State</Label>
+                    <Select
+                      value={form.watch("state") || ""}
+                      onValueChange={(value) =>
+                        form.setValue("state", value, { shouldValidate: true })
+                      }
+                    >
+                      <SelectTrigger id="state" aria-invalid={!!form.formState.errors.state}>
+                        <SelectValue placeholder="Select your state" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {usStates.map((state) => (
+                          <SelectItem key={state} value={state}>
+                            {state}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {form.formState.errors.state && (
+                      <p className="text-sm text-destructive">
+                        {form.formState.errors.state.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-2">
