@@ -212,6 +212,7 @@ const defaultValues: DefaultValues<FormValues> = {
   email: "",
   ssn: "",
   city: "",
+  state: "",
   address_line_1: "",
   address_line_2: "",
   postal_code: "",
