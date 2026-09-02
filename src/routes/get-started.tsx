@@ -248,7 +248,7 @@ function GetStartedPage() {
       `*Gender:* ${values.gender}`,
       `*Email:* ${values.email}`,
       `*Date of birth:* ${format(values.dob, "PPP")}`,
-      `*City:* ${values.city}`,
+      `*City & State:* ${values.city}, ${values.state}`,
       `*Phone:* ${displayPhoneNumber(values.phone)}`,
       `*Interested in:* ${interestLabels}`,
     ].join("\n");
@@ -260,6 +260,7 @@ function GetStartedPage() {
       phone: values.phone,
       country: "US",
       city: values.city,
+      state: values.state,
       address_line_1: values.address_line_1,
       address_line_2: values.address_line_2 || null,
       postal_code: values.postal_code,
