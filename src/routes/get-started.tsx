@@ -558,7 +558,9 @@ function GetStartedPage() {
                       aria-invalid={!!form.formState.errors.city}
                     />
                     {form.formState.errors.city && (
-                      <p className="text-sm text-destructive">{form.formState.errors.city.message}</p>
+                      <p className="text-sm text-destructive">
+                        {form.formState.errors.city.message}
+                      </p>
                     )}
                   </div>
 
