@@ -231,7 +231,7 @@ function GetStartedPage() {
     defaultValues,
   });
 
-  const dobValue = useWatch({ control: form.control, name: "dob" });
+  
 
   const onSubmit = form.handleSubmit(async (values) => {
     const ticket = generateTicketNumber();
