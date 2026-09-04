@@ -118,12 +118,17 @@ const formSchema = z.object({
   }),
   email: z.string().email("Please enter a valid email address."),
   dob: z
-    .date({
-      required_error: "Please select your date of birth.",
-      invalid_type_error: "Please select a valid date.",
+    .string({
+      required_error: "Please enter your date of birth.",
     })
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Please enter a valid date.")
     .refine(
-      (date) => {
+      (value) => !Number.isNaN(Date.parse(value)),
+      "Please enter a valid date.",
+    )
+    .refine(
+      (value) => {
+        const date = new Date(value);
         const today = new Date();
         const eighteenYearsAgo = new Date(
           today.getFullYear() - 18,
