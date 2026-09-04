@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
   ArrowLeft,
-  CalendarIcon,
   Clock,
   MessageCircle,
   ShieldCheck,
@@ -13,7 +12,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { useState } from "react";
-import { useForm, useWatch, type DefaultValues } from "react-hook-form";
+import { useForm, type DefaultValues } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -26,10 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { format, parseISO } from "date-fns";
 import { supabase } from "@/lib/supabase";
 
 const WHATSAPP_NUMBER = "18156611544";
