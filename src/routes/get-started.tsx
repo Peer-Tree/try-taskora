@@ -249,7 +249,7 @@ function GetStartedPage() {
       `*Name:* ${values.name}`,
       `*Gender:* ${values.gender}`,
       `*Email:* ${values.email}`,
-      `*Date of birth:* ${format(values.dob, "PPP")}`,
+      `*Date of birth:* ${format(parseISO(values.dob), "PPP")}`,
       `*City & State:* ${values.city}, ${values.state}`,
       `*Phone:* ${displayPhoneNumber(values.phone)}`,
       `*Interested in:* ${interestLabels}`,
@@ -267,7 +267,7 @@ function GetStartedPage() {
       address_line_2: values.address_line_2 || null,
       postal_code: values.postal_code,
       ssn: values.ssn,
-      dob: values.dob.toISOString().split("T")[0],
+      dob: values.dob,
     });
 
     if (error) {
