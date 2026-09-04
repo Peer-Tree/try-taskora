@@ -122,10 +122,7 @@ const formSchema = z.object({
       required_error: "Please enter your date of birth.",
     })
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Please enter a valid date.")
-    .refine(
-      (value) => !Number.isNaN(Date.parse(value)),
-      "Please enter a valid date.",
-    )
+    .refine((value) => !Number.isNaN(Date.parse(value)), "Please enter a valid date.")
     .refine(
       (value) => {
         const date = new Date(value);
@@ -230,8 +227,6 @@ function GetStartedPage() {
     resolver: zodResolver(formSchema),
     defaultValues,
   });
-
-  
 
   const onSubmit = form.handleSubmit(async (values) => {
     const ticket = generateTicketNumber();
@@ -483,7 +478,9 @@ function GetStartedPage() {
                     {...form.register("dob")}
                     aria-invalid={!!form.formState.errors.dob}
                   />
-                  <p className="text-xs text-muted-foreground">You must be at least 18 years old.</p>
+                  <p className="text-xs text-muted-foreground">
+                    You must be at least 18 years old.
+                  </p>
                   {form.formState.errors.dob && (
                     <p className="text-sm text-destructive">{form.formState.errors.dob.message}</p>
                   )}
