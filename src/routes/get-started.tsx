@@ -211,6 +211,7 @@ function formatSSN(input: string): string {
 const defaultValues: DefaultValues<FormValues> = {
   name: "",
   email: "",
+  dob: "",
   ssn: "",
   city: "",
   state: "",
