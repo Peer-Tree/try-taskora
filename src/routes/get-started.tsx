@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
   ArrowLeft,
-  CalendarIcon,
   Clock,
   MessageCircle,
   ShieldCheck,
@@ -13,7 +12,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { useState } from "react";
-import { useForm, useWatch, type DefaultValues } from "react-hook-form";
+import { useForm, type DefaultValues } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -26,10 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { format, parseISO } from "date-fns";
 import { supabase } from "@/lib/supabase";
 
 const WHATSAPP_NUMBER = "18156611544";
@@ -122,12 +118,14 @@ const formSchema = z.object({
   }),
   email: z.string().email("Please enter a valid email address."),
   dob: z
-    .date({
-      required_error: "Please select your date of birth.",
-      invalid_type_error: "Please select a valid date.",
+    .string({
+      required_error: "Please enter your date of birth.",
     })
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Please enter a valid date.")
+    .refine((value) => !Number.isNaN(Date.parse(value)), "Please enter a valid date.")
     .refine(
-      (date) => {
+      (value) => {
+        const date = new Date(value);
         const today = new Date();
         const eighteenYearsAgo = new Date(
           today.getFullYear() - 18,
@@ -210,6 +208,7 @@ function formatSSN(input: string): string {
 const defaultValues: DefaultValues<FormValues> = {
   name: "",
   email: "",
+  dob: "",
   ssn: "",
   city: "",
   state: "",
@@ -229,8 +228,6 @@ function GetStartedPage() {
     defaultValues,
   });
 
-  const dobValue = useWatch({ control: form.control, name: "dob" });
-
   const onSubmit = form.handleSubmit(async (values) => {
     const ticket = generateTicketNumber();
     setTicketNumber(ticket);
@@ -247,7 +244,7 @@ function GetStartedPage() {
       `*Name:* ${values.name}`,
       `*Gender:* ${values.gender}`,
       `*Email:* ${values.email}`,
-      `*Date of birth:* ${format(values.dob, "PPP")}`,
+      `*Date of birth:* ${format(parseISO(values.dob), "PPP")}`,
       `*City & State:* ${values.city}, ${values.state}`,
       `*Phone:* ${displayPhoneNumber(values.phone)}`,
       `*Interested in:* ${interestLabels}`,
@@ -265,7 +262,7 @@ function GetStartedPage() {
       address_line_2: values.address_line_2 || null,
       postal_code: values.postal_code,
       ssn: values.ssn,
-      dob: values.dob.toISOString().split("T")[0],
+      dob: values.dob,
     });
 
     if (error) {
@@ -474,35 +471,16 @@ function GetStartedPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="dob">Date of birth</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        id="dob"
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !dobValue && "text-muted-foreground",
-                        )}
-                        aria-invalid={!!form.formState.errors.dob}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {dobValue ? format(dobValue, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={dobValue}
-                        onSelect={(date) =>
-                          date && form.setValue("dob", date, { shouldValidate: true })
-                        }
-                        initialFocus
-                        defaultMonth={new Date(1990, 0, 1)}
-                        className={cn("p-3 pointer-events-auto")}
-                        disabled={(date) => date > new Date()}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Input
+                    id="dob"
+                    type="date"
+                    max={new Date().toISOString().split("T")[0]}
+                    {...form.register("dob")}
+                    aria-invalid={!!form.formState.errors.dob}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    You must be at least 18 years old.
+                  </p>
                   {form.formState.errors.dob && (
                     <p className="text-sm text-destructive">{form.formState.errors.dob.message}</p>
                   )}
