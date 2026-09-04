@@ -476,35 +476,14 @@ function GetStartedPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="dob">Date of birth</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        id="dob"
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !dobValue && "text-muted-foreground",
-                        )}
-                        aria-invalid={!!form.formState.errors.dob}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {dobValue ? format(dobValue, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={dobValue}
-                        onSelect={(date) =>
-                          date && form.setValue("dob", date, { shouldValidate: true })
-                        }
-                        initialFocus
-                        defaultMonth={new Date(1990, 0, 1)}
-                        className={cn("p-3 pointer-events-auto")}
-                        disabled={(date) => date > new Date()}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Input
+                    id="dob"
+                    type="date"
+                    max={new Date().toISOString().split("T")[0]}
+                    {...form.register("dob")}
+                    aria-invalid={!!form.formState.errors.dob}
+                  />
+                  <p className="text-xs text-muted-foreground">You must be at least 18 years old.</p>
                   {form.formState.errors.dob && (
                     <p className="text-sm text-destructive">{form.formState.errors.dob.message}</p>
                   )}
